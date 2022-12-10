@@ -1812,6 +1812,10 @@ function! fugitive#Find(object, ...) abort
     return s:VimSlash(simplify(getcwd() . '/' . a:object))
   endif
   let dir = call('s:GitDir', a:000)
+  let spos = search("^Entering '[^']*'$", "nb")
+  if spos != 0
+    let dir = dir . "/modules/" . matchstr(getline(spos), "'\\zs.*\\ze'")
+  endif
   if empty(dir)
     let file = matchstr(a:object, '^\%(:\d:\|[^:]*:\)\zs\%(\.\.\=$\|\.\.\=/.*\|/.*\|\w:/.*\)')
     let dir = FugitiveExtractGitDir(file)
